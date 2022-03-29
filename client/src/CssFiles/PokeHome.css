@@ -1,0 +1,100 @@
+.Link {
+  color: white;
+  text-decoration: inherit;
+}
+.Link:hover {
+  background-color: rgb(26, 25, 25);
+}
+.PokeHome {
+  background-image: url("./Arte/Archives/PattronPokeballs.png");
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0%;
+}
+
+.TituloPokedex {
+  margin-top: 0;
+  margin-bottom: 0%;
+  width: 100%;
+  text-align: center;
+  font-size: larger;
+  color: white;
+  background-color: black;
+}
+.ContenedorPokedex {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 80%;
+}
+.PokeContainer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: top;
+  justify-content: center;
+  height: 85vh;
+  min-height: 85vh;
+  gap: 10px;
+}
+.PokedexNav {
+  display: flex;
+  text-align: center;
+  align-items: center;
+  flex-wrap: wrap;
+  word-spacing: 20px;
+  padding: 2.5px;
+
+  z-index: 1;
+  background-color: red;
+  width: 95%;
+  padding-left: 5%;
+  height: 30px;
+  gap: 10px;
+}
+.PokedexNav .ButtonFlecha {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 20px;
+  font-size: 20px;
+  background-color: rgb(33, 134, 168);
+  width: 30px;
+  height: 20px;
+}
+.PokedexNav .ButtonFlecha:hover {
+  border: 1px solid white;
+}
+.SearchName {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 250px;
+  max-width: 250px;
+  gap: 10px;
+}
+.SearchName input {
+  border: 1px solid rgb(33, 134, 168);
+  height: 24px;
+  border-radius: 20px;
+  background-color: rgb(33, 134, 168);
+}
+.SearchName input::placeholder {
+  color: rgba(58, 58, 58, 0.556);
+}
+.SearchName button {
+  border-radius: 20px;
+  height: 24px;
+  margin-left: 3px;
+  border: 1px solid rgb(33, 134, 168);
+  background-color: rgb(33, 134, 168);
+}
+.SearchName button:hover {
+  border: 1px solid white;
+}
+.SearchName input:hover {
+  border: 1px solid white;
+}

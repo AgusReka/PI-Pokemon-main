@@ -1,0 +1,57 @@
+.PokemonInfoContainer {
+  background-color: orange;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 80%;
+  position: absolute;
+  left: 10%;
+  top: 15%;
+  gap: 10%;
+  border-radius: 20px;
+  text-align: center;
+}
+.Pokemon {
+  margin-left: 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.PokemonTypes {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+.Pokemon img {
+  width: 290px;
+}
+.PokemonStats {
+  color: white;
+  background-color: red;
+  width: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 5px;
+  height: 100%;
+}
+.PokemonStats h3 {
+  height: 15px;
+}
+.PokemonTypes h3 {
+  height: 25px;
+  width: 70px;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: antiquewhite;
+  color: black;
+}
+.Title {
+  width: 100%;
+  border-top: 4px solid white;
+}
