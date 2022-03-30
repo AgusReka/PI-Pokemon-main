@@ -28,7 +28,7 @@ export const PokemonCard = ({ params }) => {
         {params.hasOwnProperty("sprite") ? (
           params.sprite === "" ? (
             <img
-              src="https://i.ytimg.com/vi/Ubc6ZMsFcd0/maxresdefault.jpg"
+              src="/Archives/pokemonShadow.png"
               alt="pokeImg"
             />
           ) : (
@@ -36,7 +36,7 @@ export const PokemonCard = ({ params }) => {
           )
         ) : (
           <img
-            src="https://i.ytimg.com/vi/Ubc6ZMsFcd0/maxresdefault.jpg"
+            src="/Archives/pokemonShadow.png"
             alt="pokeImg"
           />
         )}
