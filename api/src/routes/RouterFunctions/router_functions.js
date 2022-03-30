@@ -108,7 +108,7 @@ const getPokemonById = async (req, res, next) => {
 };
 const createNewPokemon = async (req, res) => {
   const datos = req.body;
-
+  console.log(datos);
   const createdPoke = await Pokemon.create({
     name: datos.name,
     vida: datos.vida,
