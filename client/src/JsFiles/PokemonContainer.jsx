@@ -8,6 +8,7 @@ const axios = require("axios").default;
 export const PokemonContainer = () => {
   const pokemons = useSelector((state) => state);
   const [pokemonsCopy, usePokemonsCopy] = useState();
+  const i = 0;
   const dispatch = useDispatch();
   const [min, useMin] = useState(0);
   const [max, useMax] = useState(12);
@@ -94,7 +95,7 @@ export const PokemonContainer = () => {
           <button className="ButtonFlecha">&gt;</button>
         )}
 
-        <Filtros params={pokemonsCopy} />
+        <Filtros params={[pokemonsCopy,i]} />
 
         <form onSubmit={filtrarPorName} className={"SearchName"}>
           <input

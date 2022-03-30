@@ -103,7 +103,7 @@ const getPokemonById = async (req, res, next) => {
     ];
     res.send(pokemonInfo);
   } catch (error) {
-    next(error);
+    return res.send("No Se Encontro Ese Pokemon");
   }
 };
 const createNewPokemon = async (req, res) => {
