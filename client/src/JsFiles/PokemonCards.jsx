@@ -1,16 +1,22 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "../CssFiles/PokeCard.css";
 export const PokemonCard = ({ params }) => {
-  //console.log(params)
+  console.log(params);
   const RandomKey = () => {
     return Math.floor(Math.random() * 999999) + 1;
   };
-  return (
+  return typeof params === "string" ? (
+    <h4>POKEMON NO ENCONTRADO</h4>
+  ) : (
     <div className="PokeCard">
       <span>
         <h4>
-          {"#"+(params.id || params.pokedex_id)+" "}
-          {params.name}
+          {(params.id
+            ? "#" + params.id
+            : params.pokedex_id
+            ? "#" + params.pokedex_id
+            : "") + " "}
+          {params.name ? params.name : ""}
         </h4>
       </span>
 
@@ -19,14 +25,21 @@ export const PokemonCard = ({ params }) => {
           params.id ? params.id : params.pokedex_id
         }/${params.hasOwnProperty("id")}`}
       >
-        <img
-          src={
-            params.hasOwnProperty("sprite")
-              ? params.sprite
-              : "https://cdn.vox-cdn.com/thumbor/IhuPwFLVg19jF8B6rSmpy5T1-tY=/0x0:1920x1080/1400x788/filters:focal(807x387:1113x693):format(jpeg)/cdn.vox-cdn.com/uploads/chorus_image/image/53254027/who_pokemon.0.jpg"
-          }
-          alt="PokemonImage"
-        />
+        {params.hasOwnProperty("sprite") ? (
+          params.sprite === "" ? (
+            <img
+              src="https://i.ytimg.com/vi/Ubc6ZMsFcd0/maxresdefault.jpg"
+              alt="pokeImg"
+            />
+          ) : (
+            <img src={params.sprite} alt="pokeImg" />
+          )
+        ) : (
+          <img
+            src="https://i.ytimg.com/vi/Ubc6ZMsFcd0/maxresdefault.jpg"
+            alt="pokeImg"
+          />
+        )}
       </Link>
       <div className="Types">
         {params.types ? (

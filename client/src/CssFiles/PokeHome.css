@@ -6,8 +6,9 @@
   background-color: rgb(26, 25, 25);
 }
 .PokeHome {
-  background-image: url("./Arte/Archives/PattronPokeballs.png");
+  background-image: url("./Arte/PattronPokeballs.png");
   height: 100vh;
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -33,7 +34,6 @@
 .PokeContainer {
   display: flex;
   flex-wrap: wrap;
-  align-items: top;
   justify-content: center;
   height: 85vh;
   min-height: 85vh;

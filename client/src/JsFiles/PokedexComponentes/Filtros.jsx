@@ -1,9 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 export const Filtros = ({ params }) => {
-  let pokemonsCopy = params;
+  let {pokemonsCopy} = params;
+  let {ResetLimits} = params;
   const dispatch = useDispatch();
   const [tiposDataBase, usetiposDataBase] = useState([]);
   const RandomKey = () => {
@@ -16,28 +17,20 @@ export const Filtros = ({ params }) => {
     return datosTipos;
   };
   const FiltrarPorTipo = async (e) => {
+    ResetLimits();
     const payload = e.target.value;
     console.log([payload[0].toUpperCase() + payload.substring(1)]);
-    if (payload === "Reset") {
-      await dispatch({
-        type: "TraerDatos",
-        payload: pokemonsCopy,
-      });
-    } else {
+      
       dispatch({
         type: "FiltrarPorTipo",
         payload: payload,
       });
-    }
+    
   };
   const FiltrarPorNombre = async (e) => {
+    ResetLimits();
     const tipo = e.target.value;
-    if (tipo === "Reset") {
-      await dispatch({
-        type: "TraerDatos",
-        payload: pokemonsCopy,
-      });
-    } else {
+    
       if (tipo === "as") {
         await dispatch({
           type: "FiltarPorNombreOrdenados",
@@ -48,17 +41,18 @@ export const Filtros = ({ params }) => {
           type: "FiltarPorNombreOrdenados",
           payload: tipo,
         });
+      }else if (tipo === "Reset"){
+        await dispatch({
+          type: "TraerDatos",
+          payload: pokemonsCopy,
+        });
       }
-    }
+    
   };
   const FiltrarPorFuerza = async (e) => {
+    ResetLimits();
     const tipo = e.target.value;
-    if (tipo === "Reset") {
-      await dispatch({
-        type: "TraerDatos",
-        payload: pokemonsCopy,
-      });
-    } else {
+    
       if (tipo === "as") {
         await dispatch({
           type: "FiltarPorFuerza",
@@ -69,18 +63,19 @@ export const Filtros = ({ params }) => {
           type: "FiltarPorFuerza",
           payload: tipo,
         });
+      }else if (tipo === "Reset"){
+        await dispatch({
+          type: "TraerDatos",
+          payload: pokemonsCopy,
+        });
       }
-    }
+    
     console.log(tipo);
   };
   const FiltrarPorCreacion = async (e) => {
+    ResetLimits();
     const tipo = e.target.value;
-    if (tipo === "Reset") {
-      await dispatch({
-        type: "TraerDatos",
-        payload: pokemonsCopy,
-      });
-    } else {
+
       if (tipo === "Creados") {
         await dispatch({
           type: "TraerDatos",
@@ -89,18 +84,24 @@ export const Filtros = ({ params }) => {
         await dispatch({
           type: "FiltarPorCreados",
           payload: tipo,
-        });
+        })
       } else if (tipo === "Api") {
         await dispatch({
           type: "TraerDatos",
           payload: pokemonsCopy,
         });
-        await dispatch({
+        let b = await dispatch({
           type: "FiltarPorCreados",
           payload: tipo,
         });
+        console.log(b);
+      } else if (tipo === "Reset"){
+        await dispatch({
+          type: "TraerDatos",
+          payload: pokemonsCopy,
+        });
       }
-    }
+    
     console.log(tipo);
   };
   useEffect(async () => {

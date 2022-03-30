@@ -25,9 +25,9 @@ export const PokemonContainer = () => {
     return datosPokemon;
   };
   const TraerPokePorNombre = async (props) => {
-    const datosPokemon = await (await axios.get(
-      `http://localhost:3001/pokemons?name=${props}`
-    )).data;
+    const datosPokemon = await (
+      await axios.get(`http://localhost:3001/pokemons?name=${props}`)
+    ).data;
     return datosPokemon;
   };
   const mandarLosDatos = async (proms) => {
@@ -38,7 +38,7 @@ export const PokemonContainer = () => {
     //console.log(proms)
   };
   let pokemonArray = [];
-  pokemonArray = pokemons.slice(min, max);
+  pokemonArray = pokemons ? pokemons.slice(min, max) : [];
   const Next = () => {
     useMin(min + 12);
     useMax(max + 12);
@@ -57,13 +57,14 @@ export const PokemonContainer = () => {
       dispatch({
         type: "Reset",
       });
-      console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-      console.log(pokemonsCopy);
       if (pokemonsCopy) mandarLosDatos(pokemonsCopy);
       else await mandarLosDatos(await TraerDatosDeLaApi());
       ResetLimits();
     } else {
-      await mandarLosDatos([await TraerPokePorNombre(name)]);
+      let a = await TraerPokePorNombre(name);
+
+      await mandarLosDatos([a]);
+      console.log(a);
     }
   };
   const HandleName = (e) => {
@@ -71,9 +72,11 @@ export const PokemonContainer = () => {
   };
 
   useEffect(async () => {
-    if (pokemons.length === 0) {
-      await mandarLosDatos(await TraerDatosDeLaApi());
-    }
+    if (pokemons) {
+      if (pokemons.length === 0) {
+        await mandarLosDatos(await TraerDatosDeLaApi());
+      }
+    } else await mandarLosDatos(await TraerDatosDeLaApi());
   }, []);
 
   return (
@@ -87,15 +90,19 @@ export const PokemonContainer = () => {
         ) : (
           <button className="ButtonFlecha">&lt;</button>
         )}
-        {max < pokemons.length ? (
-          <button className="ButtonFlecha" onClick={Next}>
-            &gt;
-          </button>
+        {pokemons ? (
+          max < pokemons.length ? (
+            <button className="ButtonFlecha" onClick={Next}>
+              &gt;
+            </button>
+          ) : (
+            <button className="ButtonFlecha">&gt;</button>
+          )
         ) : (
-          <button className="ButtonFlecha">&gt;</button>
+          <></>
         )}
 
-        <Filtros params={[pokemonsCopy,i]} />
+        <Filtros params={{ pokemonsCopy, ResetLimits }} />
 
         <form onSubmit={filtrarPorName} className={"SearchName"}>
           <input
@@ -107,10 +114,19 @@ export const PokemonContainer = () => {
         </form>
       </nav>
       <div className="PokeContainer">
-        {pokemons.length < 1 ? <h1>Cargando...</h1> : <></>}
-        {pokemonArray.map((el) => {
-          return <PokemonCard key={RandomKey()} params={el} />;
-        })}
+        {pokemons ? (
+          <>
+            {pokemons.length > 0 ? (
+              pokemonArray.map((el) => {
+                return <PokemonCard key={RandomKey()} params={el} />;
+              })
+            ) : (
+              <h1>No hay Pokemons</h1>
+            )}
+          </>
+        ) : (
+          <h1>Cargando...</h1>
+        )}
       </div>
     </div>
   );

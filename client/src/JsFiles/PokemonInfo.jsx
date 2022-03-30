@@ -21,7 +21,8 @@ export const PokemonInfo = () => {
   useEffect(async () => {
     let p;
     let b = params.isCreatedByUser;
-    if (params.isCreatedByUser === "true") {
+  
+    if (b === "true") {
       p = await (
         await axios.get(`http://localhost:3001/pokemonsDataBase`)
       ).data;
@@ -37,12 +38,15 @@ export const PokemonInfo = () => {
         console.log(p);
         HandlePokeDatos(p);
       }
-    } else if (params.isCreatedByUser === "false") {
+    } else if (b === "false") {
       p = await (
         await axios.get(`http://localhost:3001/pokemons/${params.id}`)
       ).data;
       console.log("PPP", p);
       console.log(typeof p === "string");
+      HandlePokeDatos(p);
+    } else{
+      p = "404 URL INCORRECTA"
       HandlePokeDatos(p);
     }
     console.log(p);

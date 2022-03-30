@@ -1,0 +1,22 @@
+.Page404 {
+  margin-top: 10%;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 0px;
+}
+.Page404 a {
+  color: black;
+  margin: 0%;
+}
+.Page404 a:hover {
+  color: grey;
+  background-color: transparent;
+}
+.Page404 h1 {
+  color: black;
+  margin: 0%;
+  font-size: 200px;
+}

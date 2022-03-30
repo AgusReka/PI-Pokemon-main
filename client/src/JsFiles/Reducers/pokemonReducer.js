@@ -112,12 +112,14 @@ export const pokemonReducer = (state = [], action) => {
       return (state = mergeSortDes(state));
       case "FiltarPorCreados":
         if(action.payload === "Creados"){
-          return state.filter((el)=>el.hasOwnProperty("id"));
+          let creados = state.filter((el)=>el.hasOwnProperty("id"));
+          console.log(creados);
+          return creados;
         }else if(action.payload === "Api"){
           return state.filter((el)=>el.hasOwnProperty("pokedex_id"));
         }
-       
+      break;
     default:
-      return state;
+      break;
   }
 };

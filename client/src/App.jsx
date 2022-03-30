@@ -4,6 +4,7 @@ import { HomePage } from "./JsFiles/HomePage";
 import { CreatePokemon } from "./JsFiles/CreatePokemon";
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import { PokemonInfo } from "./JsFiles/PokemonInfo";
+import { Page404 } from "./JsFiles/PokedexComponentes/Page404";
 
 const axios = require("axios").default;
 function App() {
@@ -26,6 +27,8 @@ function App() {
           <Route exact path="/" element={<HomePage />} />
           <Route exact path="/CreatePokemon" element={<CreatePokemon />} />
           <Route exact path="/Pokedex/:id/:isCreatedByUser" element={<PokemonInfo/> } />
+          <Route path='*' element={<Page404/>}/>
+          
         </Routes>
       </BrowserRouter>
     </div>

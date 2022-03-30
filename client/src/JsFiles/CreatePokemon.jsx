@@ -1,20 +1,22 @@
 import "../CssFiles/CreatePoke.css";
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 
-import { useDispatch, useSelector } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 const axios = require("axios").default;
 
 export const CreatePokemon = () => {
   const dispatch = useDispatch();
-  const [propiedades, usePropiedades] = useState({});
+  const [propiedades, usePropiedades] = useState({sprite:""});
   const [tipos, useTipos] = useState([]);
   const [tiposDataBase, useTiposDataBase] = useState([]);
   const [envioExitoso, useEnvioExitoso] = useState();
   const HandleEnvioExitoso = (params, text) => {
-    useEnvioExitoso({ params, text });
+    useEnvioExitoso({params, text});
   };
   const traerDatosFromApi = async () => {
-    const datos = await (await axios.get("http://localhost:3001/types")).data;
+    const datos = await (
+      await axios.get("http://localhost:3001/types")
+    ).data;
     console.log("Se trajeron los Datos");
     //console.log(datos[0])
     return datos;
@@ -35,11 +37,11 @@ export const CreatePokemon = () => {
     console.log(value);
   };
   const HandlePropiedades = async (name, value) => {
-    await usePropiedades({ ...propiedades, [name]: value });
+    await usePropiedades({...propiedades, [name]: value});
   };
   const HandleTipos = (e) => {
     if (tipos.length > 1) return;
-    let copied = tipos.find((el) => el == e.target.value);
+    let copied = tipos.find((el) => el === e.target.value);
     if (copied) return;
     CambiarTipos(e.target.value);
   };
@@ -49,24 +51,25 @@ export const CreatePokemon = () => {
   const BorrarTipo = (e) => {
     const name = e.target.name;
     useTipos(
-      tipos.filter((el) => {
-        if (el != name) return el != name;
-      })
+      tipos.filter((el) => {if (el !== name) return el !== name})
     );
   };
   const enviarPokemon = async (e) => {
     e.preventDefault();
-    const datos = { ...propiedades, tipos: tipos };
+    const datos = {...propiedades, tipos: tipos};
     console.log(datos);
     if (Object.keys(datos).length > 8) {
-      if (datos.tipos.length < 1) HandleEnvioExitoso(false, "!Faltan Llenar Datos¡");
+      if (datos.tipos.length < 1)
+        HandleEnvioExitoso(false, "!Faltan Llenar Datos¡");
       else {
         const pokemon = await axios.post(
           "http://localhost:3001/pokemons",
           datos
         );
         let pokeApi = await (
-          await axios.get("http://localhost:3001/pokemonsDataBase")
+          await axios.get(
+            "http://localhost:3001/pokemonsDataBase"
+          )
         ).data;
         await dispatch({
           type: "AgregarPokeDatabase",
@@ -143,7 +146,7 @@ export const CreatePokemon = () => {
               max={150}
               placeholder="Sprite (URL):"
               name="sprite"
-              type="text"
+              type="url"
               onChange={HandleState}
             />
           </>
@@ -172,7 +175,9 @@ export const CreatePokemon = () => {
           </div>
           {envioExitoso != undefined ? (
             envioExitoso.params ? (
-              <h4 className="InfoCreacionText">Se creo el pokemon exitosamente</h4>
+              <h4 className="InfoCreacionText">
+                Se creo el pokemon exitosamente
+              </h4>
             ) : envioExitoso.text ? (
               <h4 className="InfoCreacionText">{envioExitoso.text}</h4>
             ) : (
