@@ -1,7 +1,7 @@
 .CreatePokemon {
   background-color: red;
   background-image: url("./Arte/PattronPokeballs.png");
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -18,7 +18,7 @@
   justify-content: center;
   flex-direction: column;
   width: 60%;
-  gap: 10px;
+  gap: 5px;
   padding-top: 20px;
   border-radius: 20px;
 }

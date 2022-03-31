@@ -81,7 +81,6 @@ export const PokemonContainer = () => {
 
   return (
     <div className="ContenedorPokedex">
-      <h1 className="TituloPokedex"> Esta es la Pokedex</h1>
       <nav className="PokedexNav">
         {min > 0 ? (
           <button className="ButtonFlecha" onClick={Prev}>

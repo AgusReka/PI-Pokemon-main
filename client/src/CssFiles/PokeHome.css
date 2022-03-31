@@ -7,23 +7,13 @@
 }
 .PokeHome {
   background-image: url("./Arte/PattronPokeballs.png");
-  height: 100vh;
-
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0%;
 }
 
-.TituloPokedex {
-  margin-top: 0;
-  margin-bottom: 0%;
-  width: 100%;
-  text-align: center;
-  font-size: larger;
-  color: white;
-  background-color: black;
-}
 .ContenedorPokedex {
   display: flex;
   align-content: center;
@@ -46,13 +36,13 @@
   flex-wrap: wrap;
   word-spacing: 20px;
   padding: 2.5px;
-
+  border-radius: 20px;
   z-index: 1;
   background-color: red;
   width: 95%;
   padding-left: 5%;
-  height: 30px;
   gap: 10px;
+  margin-top: 50px;
 }
 .PokedexNav .ButtonFlecha {
   display: flex;

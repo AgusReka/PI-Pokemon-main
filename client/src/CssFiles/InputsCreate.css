@@ -4,7 +4,7 @@
   display: flex;
   align-items: center;
   justify-items: center;
-  margin: 0%;
+  height: 20px;
   width: fit-content;
 }
 .valueCorrecto {
