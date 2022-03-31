@@ -7,11 +7,10 @@
   align-items: center;
 }
 .CreatePokemon h1 {
-  color: orange;
-  width: 100%;
-  background-color: black;
+  margin-top: 100px;
 }
 .FormularioPokemon {
+  margin-top: 5%;
   background-color: orange;
   display: flex;
   align-items: center;

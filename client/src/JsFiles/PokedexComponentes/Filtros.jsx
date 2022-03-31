@@ -110,29 +110,29 @@ export const Filtros = ({ params }) => {
   return (
     <>
       <select onChange={FiltrarPorTipo}>
-        <option value={"Reset"}>-Filtrar Por Tipo-</option>
+        <option style={{fontWeight: "bold"}} value={"Reset"}>-Filtrar Por Tipo-</option>
         {tiposDataBase.map((el) => {
           return (
-            <option key={RandomKey()} value={el.name}>
+            <option style={{fontWeight: "bold"}} key={RandomKey()} value={el.name}>
               {el.name[0].toUpperCase() + el.name.substring(1)}
             </option>
           );
         })}
       </select>
       <select onChange={FiltrarPorNombre}>
-        <option value={"Reset"}>-Filtrar Por Nombre-</option>
-        <option value={"as"}>Nombre Ascendente</option>
-        <option value={"des"}>Nombre Descendente</option>
+        <option style={{fontWeight: "bold"}} value={"Reset"}>-Filtrar Por Nombre-</option>
+        <option style={{fontWeight: "bold"}} value={"as"}>Nombre Ascendente</option>
+        <option style={{fontWeight: "bold"}} value={"des"}>Nombre Descendente</option>
       </select>
       <select onChange={FiltrarPorFuerza}>
-        <option value={"Reset"}>-Filtrar Por Fuerza-</option>
-        <option value={"as"}>Fuerza Ascendente</option>
+        <option style={{fontWeight: "bold"}} value={"Reset"}>-Filtrar Por Fuerza-</option>
+        <option style={{fontWeight: "bold"}} value={"as"}>Fuerza Ascendente</option>
         <option value={"des"}>Fuerza Descendente</option>
       </select>
       <select onChange={FiltrarPorCreacion}>
-        <option value={"Reset"}>-Filtrar Por Creacion-</option>
-        <option value={"Creados"}>Creados Por Usuario</option>
-        <option value={"Api"}>Traidos De La Api</option>
+        <option style={{fontWeight: "bold"}} value={"Reset"}>-Filtrar Por Creacion-</option>
+        <option style={{fontWeight: "bold"}} value={"Creados"}>Creados Por Usuario</option>
+        <option style={{fontWeight: "bold"}} value={"Api"}>Traidos De La Api</option>
       </select>
     </>
   );

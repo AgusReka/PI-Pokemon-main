@@ -10,6 +10,10 @@ export const CreatePokemon = () => {
   const [propiedades, usePropiedades] = useState({
     sprite: { name: "sprite", value: "" },
   });
+  const [creandoPokemon, useCreandoPokemon] = useState(false);
+  const HandleCreandoPoke = (params) => {
+    useCreandoPokemon(params);
+  }
   const [tipos, useTipos] = useState([]);
   const [tiposDataBase, useTiposDataBase] = useState([]);
   const [envioExitoso, useEnvioExitoso] = useState();
@@ -183,6 +187,7 @@ export const CreatePokemon = () => {
         }
       });
       if (puedeMandar) {
+        HandleCreandoPoke(true);
         keysPropiedades.map((key) => {
           if (key === "tipos") {
             poke = { ...poke, [key]: datos[key] };
@@ -202,6 +207,7 @@ export const CreatePokemon = () => {
           payload: await pokeApi,
         });
         HandleEnvioExitoso(true);
+        HandleCreandoPoke(false);
       } else {
         await HandleDatosIncorrectos();
         HandleEnvioExitoso(false, "!Faltan Llenar Datos¡");
@@ -213,8 +219,6 @@ export const CreatePokemon = () => {
   };
   return (
     <div className={"CreatePokemon"}>
-      <h1>Welcome To Create Pokemon</h1>
-
       {tiposDataBase.length < 1 ? (
         <h1>Cargando...</h1>
       ) : (

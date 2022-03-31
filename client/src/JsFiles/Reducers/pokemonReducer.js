@@ -1,9 +1,9 @@
 const axios = require("axios").default;
-export const pokemonReducer = (state = [], action) => {
+export const pokemonReducer = (state = {data:[],detalle:[],copy:[]}, action) => {
   switch (action.type) {
     case "TraerDatos":
       //const datos = await axios.get("http:localhost:3001/pokemons")
-      return (state = action.payload);
+      return {...state,data: action.payload,copy:action.payload}
     case "Reset":
       //const datos = await axios.get("http:localhost:3001/pokemons")
       return (state = []);
