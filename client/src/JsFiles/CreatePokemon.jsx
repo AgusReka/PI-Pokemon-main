@@ -7,22 +7,23 @@ const axios = require("axios").default;
 
 export const CreatePokemon = () => {
   const dispatch = useDispatch();
-  const [propiedades, usePropiedades] = useState({});
+  const [propiedades, usePropiedades] = useState({
+    sprite: { name: "sprite", value: "" },
+  });
   const [tipos, useTipos] = useState([]);
   const [tiposDataBase, useTiposDataBase] = useState([]);
   const [envioExitoso, useEnvioExitoso] = useState();
   const [datosCorrectos, usedatosCorrectos] = useState({
-    name: { bool: false, error: "Campo Requerido" },
-    vida: { bool: false, error: "Campo Requerido" },
-    fuerza: { bool: false, error: "Campo Requerido" },
-    defensa: { bool: false, error: "Campo Requerido" },
-    velocidad: { bool: false, error: "Campo Requerido" },
-    altura: { bool: false, error: "Campo Requerido" },
-    peso: { bool: false, error: "Campo Requerido" },
-    sprite: { bool: false, error: "" },
-    tipos: { bool: false, error: "Hace Falta 1 Tipo" },
+    name: { bool: false, error: "*" },
+    vida: { bool: false, error: "*" },
+    fuerza: { bool: false, error: "*" },
+    defensa: { bool: false, error: "*" },
+    velocidad: { bool: false, error: "*" },
+    altura: { bool: false, error: "*" },
+    peso: { bool: false, error: "*" },
+    sprite: { bool: true, error: "" },
+    tipos: { bool: false, error: "*" },
   });
-  const [tiposCorrectos, usetiposCorrectos] = useState();
   const HandleEnvioExitoso = (params, text) => {
     useEnvioExitoso({ params, text });
   };
@@ -52,7 +53,10 @@ export const CreatePokemon = () => {
           [key]: {
             bool: datosCorrectos[key].bool,
             error:
-              key === "tipos" ? "Hace Falta 1 Tipo": key !== "sprite" ? "No Se Puede Dejar Este Campo Incompleto"
+              key === "tipos"
+                ? "Hace Falta 1 Tipo"
+                : key !== "sprite"
+                ? "No Se Puede Dejar Este Campo Incompleto"
                 : "",
           },
         };
@@ -87,8 +91,17 @@ export const CreatePokemon = () => {
         );
         HandlePropiedadesBorrar(nombre);
       } else {
-        HandleDatosCorrectos(true, "", e.target.name);
-        await HandlePropiedades(e.target.name, e.target.value);
+        let soloLetras = /^[a-zA-Z]+$/.test(value);
+        if (soloLetras) {
+          HandleDatosCorrectos(true, "", e.target.name);
+          await HandlePropiedades(e.target.name, e.target.value);
+        } else {
+          HandleDatosCorrectos(
+            false,
+            "El Nombre Solo Puede Tener Letras",
+            e.target.name
+          );
+        }
       }
     } else if (nombre === "sprite") {
       let a = value.substring(0, 8);
@@ -98,11 +111,19 @@ export const CreatePokemon = () => {
       } else {
         HandleDatosCorrectos(false, "URL Invalida", e.target.name);
       }
-    }else{
+    } else {
       if (!isNaN(value)) {
         if (value > 0) {
-          HandleDatosCorrectos(true, "", e.target.name);
-          await HandlePropiedades(e.target.name, Number(e.target.value));
+          if (value < 150) {
+            HandleDatosCorrectos(true, "", e.target.name);
+            await HandlePropiedades(e.target.name, Number(e.target.value));
+          } else {
+            HandleDatosCorrectos(
+              false,
+              "El Numero Debe Ser Menor A 150",
+              e.target.name
+            );
+          }
         } else {
           HandleDatosCorrectos(
             false,
@@ -110,7 +131,7 @@ export const CreatePokemon = () => {
             e.target.name
           );
         }
-      } 
+      }
     }
   };
   const HandlePropiedades = async (name, value) => {
@@ -186,31 +207,6 @@ export const CreatePokemon = () => {
         HandleEnvioExitoso(false, "!Faltan Llenar Datos¡");
       }
     }
-    /*
-    if (datos.length > 8) {
-      if (datos[datos.length - 1].tipos.length < 1)
-        HandleEnvioExitoso(false, "!Faltan Llenar Datos¡");
-      else {
-        let datosAEnviar = {};
-        datos.map((el) => {
-          if (el.tipos) {
-            datosAEnviar = {
-              ...datosAEnviar,
-              tipos: el.tipos.map((elTipos) => {
-                return elTipos;
-              }),
-            };
-          } else {
-            datosAEnviar = { ...datosAEnviar, [el.name]: el.value };
-          }
-        });
-        console.log(datosAEnviar.tipos);
-        
-      }
-    } else {
-      await HandleDatosIncorrectos();
-      HandleEnvioExitoso(false, "!Faltan Llenar Datos¡");
-    }*/
   };
   const RandomKey = () => {
     return Math.floor(Math.random() * 999999) + 1;
@@ -218,212 +214,220 @@ export const CreatePokemon = () => {
   return (
     <div className={"CreatePokemon"}>
       <h1>Welcome To Create Pokemon</h1>
+
       {tiposDataBase.length < 1 ? (
         <h1>Cargando...</h1>
       ) : (
         <form className="FormularioPokemon" onSubmit={enviarPokemon}>
+          {/*Inputs*/}
           <>
             <h2>¡Crea Tu Propio Pokemon!</h2>
-            <div className="NameInput">
-              <input
-                placeholder="Name:"
-                name="name"
-                type="text"
-                onChange={HandleState}
-              />
-              {datosCorrectos != undefined ? (
-                datosCorrectos.name.bool ? (
-                  propiedades["name"].value != 0 ? (
-                    <span className="valueCorrecto">&#9745;</span>
+            <h2 className="CamposObligatorios">Los Input Con<p>*</p>Son Campos Obligatorios
+            </h2>
+            <>
+              <div className="NameInput">
+                <input
+                  placeholder="Name:"
+                  name="name"
+                  type="text"
+                  onChange={HandleState}
+                />
+                {datosCorrectos != undefined ? (
+                  datosCorrectos.name.bool ? (
+                    propiedades["name"].value != 0 ? (
+                      <span className="valueCorrecto">&#9745;</span>
+                    ) : (
+                      <span className="valueIncorrecto">
+                        <h3>Campo Requerido</h3>
+                      </span>
+                    )
                   ) : (
                     <span className="valueIncorrecto">
-                      <h3>Campo Requerido</h3>
+                      {datosCorrectos.name.error ? (
+                        <h3>{datosCorrectos.name.error}</h3>
+                      ) : (
+                        <></>
+                      )}
                     </span>
                   )
                 ) : (
-                  <span className="valueIncorrecto">
-                    {datosCorrectos.name.error ? (
-                      <h3>{datosCorrectos.name.error}</h3>
-                    ) : (
-                      <></>
-                    )}
-                  </span>
-                )
-              ) : (
-                <></>
-              )}
-            </div>
+                  <></>
+                )}
+              </div>
 
-            <div className="NameInput">
-              <input
-                placeholder="Hp:"
-                name="vida"
-                type="number"
-                onChange={HandleState}
-                max={150}
-              />
-              {datosCorrectos != undefined ? (
-                datosCorrectos.vida.bool ? (
-                  <span className="valueCorrecto">&#9745;</span>
+              <div className="NameInput">
+                <input
+                  placeholder="Hp:"
+                  name="vida"
+                  type="number"
+                  onChange={HandleState}
+                  max={150}
+                />
+                {datosCorrectos != undefined ? (
+                  datosCorrectos.vida.bool ? (
+                    <span className="valueCorrecto">&#9745;</span>
+                  ) : (
+                    <span className="valueIncorrecto">
+                      {datosCorrectos.vida.error ? (
+                        <h3>{datosCorrectos.vida.error}</h3>
+                      ) : (
+                        <></>
+                      )}
+                    </span>
+                  )
                 ) : (
-                  <span className="valueIncorrecto">
-                    {datosCorrectos.vida.error ? (
-                      <h3>{datosCorrectos.vida.error}</h3>
-                    ) : (
-                      <></>
-                    )}
-                  </span>
-                )
-              ) : (
-                <></>
-              )}
-            </div>
+                  <></>
+                )}
+              </div>
 
-            <div className="NameInput">
-              <input
-                placeholder="Fuerza:"
-                name="fuerza"
-                type="number"
-                onChange={HandleState}
-                max={150}
-              />
-              {datosCorrectos != undefined ? (
-                datosCorrectos.fuerza.bool ? (
-                  <span className="valueCorrecto">&#9745;</span>
+              <div className="NameInput">
+                <input
+                  placeholder="Fuerza:"
+                  name="fuerza"
+                  type="number"
+                  onChange={HandleState}
+                  max={150}
+                />
+                {datosCorrectos != undefined ? (
+                  datosCorrectos.fuerza.bool ? (
+                    <span className="valueCorrecto">&#9745;</span>
+                  ) : (
+                    <span className="valueIncorrecto">
+                      {datosCorrectos.fuerza.error ? (
+                        <h3>{datosCorrectos.fuerza.error}</h3>
+                      ) : (
+                        <></>
+                      )}
+                    </span>
+                  )
                 ) : (
-                  <span className="valueIncorrecto">
-                    {datosCorrectos.fuerza.error ? (
-                      <h3>{datosCorrectos.fuerza.error}</h3>
-                    ) : (
-                      <></>
-                    )}
-                  </span>
-                )
-              ) : (
-                <></>
-              )}
-            </div>
-            <div className="NameInput">
-              <input
-                placeholder="Defensa:"
-                name="defensa"
-                type="number"
-                onChange={HandleState}
-                max={150}
-              />
-              {datosCorrectos != undefined ? (
-                datosCorrectos.defensa.bool ? (
-                  <span className="valueCorrecto">&#9745;</span>
+                  <></>
+                )}
+              </div>
+              <div className="NameInput">
+                <input
+                  placeholder="Defensa:"
+                  name="defensa"
+                  type="number"
+                  onChange={HandleState}
+                  max={150}
+                />
+                {datosCorrectos != undefined ? (
+                  datosCorrectos.defensa.bool ? (
+                    <span className="valueCorrecto">&#9745;</span>
+                  ) : (
+                    <span className="valueIncorrecto">
+                      {datosCorrectos.defensa.error ? (
+                        <h3>{datosCorrectos.defensa.error}</h3>
+                      ) : (
+                        <></>
+                      )}
+                    </span>
+                  )
                 ) : (
-                  <span className="valueIncorrecto">
-                    {datosCorrectos.defensa.error ? (
-                      <h3>{datosCorrectos.defensa.error}</h3>
-                    ) : (
-                      <></>
-                    )}
-                  </span>
-                )
-              ) : (
-                <></>
-              )}
-            </div>
-            <div className="NameInput">
-              <input
-                placeholder="Velocidad:"
-                max={150}
-                name="velocidad"
-                type="number"
-                onChange={HandleState}
-              />
-              {datosCorrectos != undefined ? (
-                datosCorrectos.velocidad.bool ? (
-                  <span className="valueCorrecto">&#9745;</span>
+                  <></>
+                )}
+              </div>
+              <div className="NameInput">
+                <input
+                  placeholder="Velocidad:"
+                  max={150}
+                  name="velocidad"
+                  type="number"
+                  onChange={HandleState}
+                />
+                {datosCorrectos != undefined ? (
+                  datosCorrectos.velocidad.bool ? (
+                    <span className="valueCorrecto">&#9745;</span>
+                  ) : (
+                    <span className="valueIncorrecto">
+                      {datosCorrectos.velocidad.error ? (
+                        <h3>{datosCorrectos.velocidad.error}</h3>
+                      ) : (
+                        <></>
+                      )}
+                    </span>
+                  )
                 ) : (
-                  <span className="valueIncorrecto">
-                    {datosCorrectos.velocidad.error ? (
-                      <h3>{datosCorrectos.velocidad.error}</h3>
-                    ) : (
-                      <></>
-                    )}
-                  </span>
-                )
-              ) : (
-                <></>
-              )}
-            </div>
-            <div className="NameInput">
-              <input
-                max={150}
-                placeholder="Altura:"
-                name="altura"
-                type="number"
-                onChange={HandleState}
-              />
-              {datosCorrectos != undefined ? (
-                datosCorrectos.altura.bool ? (
-                  <span className="valueCorrecto">&#9745;</span>
+                  <></>
+                )}
+              </div>
+              <div className="NameInput">
+                <input
+                  max={150}
+                  placeholder="Altura:"
+                  name="altura"
+                  type="number"
+                  onChange={HandleState}
+                />
+                {datosCorrectos != undefined ? (
+                  datosCorrectos.altura.bool ? (
+                    <span className="valueCorrecto">&#9745;</span>
+                  ) : (
+                    <span className="valueIncorrecto">
+                      {datosCorrectos.altura.error ? (
+                        <h3>{datosCorrectos.altura.error}</h3>
+                      ) : (
+                        <></>
+                      )}
+                    </span>
+                  )
                 ) : (
-                  <span className="valueIncorrecto">
-                    {datosCorrectos.altura.error ? (
-                      <h3>{datosCorrectos.altura.error}</h3>
-                    ) : (
-                      <></>
-                    )}
-                  </span>
-                )
-              ) : (
-                <></>
-              )}
-            </div>
-            <div className="NameInput">
-              <input
-                max={150}
-                placeholder="Peso:"
-                name="peso"
-                type="number"
-                onChange={HandleState}
-              />
-              {datosCorrectos != undefined ? (
-                datosCorrectos.peso.bool ? (
-                  <span className="valueCorrecto">&#9745;</span>
+                  <></>
+                )}
+              </div>
+              <div className="NameInput">
+                <input
+                  max={150}
+                  placeholder="Peso:"
+                  name="peso"
+                  type="number"
+                  onChange={HandleState}
+                />
+                {datosCorrectos != undefined ? (
+                  datosCorrectos.peso.bool ? (
+                    <span className="valueCorrecto">&#9745;</span>
+                  ) : (
+                    <span className="valueIncorrecto">
+                      {datosCorrectos.peso.error ? (
+                        <h3>{datosCorrectos.peso.error}</h3>
+                      ) : (
+                        <></>
+                      )}
+                    </span>
+                  )
                 ) : (
-                  <span className="valueIncorrecto">
-                    {datosCorrectos.peso.error ? (
-                      <h3>{datosCorrectos.peso.error}</h3>
-                    ) : (
-                      <></>
-                    )}
-                  </span>
-                )
-              ) : (
-                <></>
-              )}
-            </div>
-            <div className="NameInput">
-              <input
-                max={150}
-                placeholder="Sprite (URL): Este Campo Puede Estar Vacio"
-                name="sprite"
-                type="url"
-                onChange={HandleState}
-              />
-              {datosCorrectos != undefined ? (
-                datosCorrectos.sprite.bool ? (
-                  <span className="valueCorrecto">&#9745;</span>
+                  <></>
+                )}
+              </div>
+              <div className="NameInput">
+                <input
+                  max={150}
+                  placeholder="Sprite (URL): Este Campo Puede Estar Vacio"
+                  name="sprite"
+                  type="url"
+                  onChange={HandleState}
+                />
+                {datosCorrectos != undefined ? (
+                  datosCorrectos.sprite.bool ? (
+                    <span className="valueCorrecto">&#9745;</span>
+                  ) : (
+                    <span className="valueIncorrecto">
+                      {datosCorrectos.sprite.error ? (
+                        <h3>{datosCorrectos.sprite.error}</h3>
+                      ) : (
+                        <></>
+                      )}
+                    </span>
+                  )
                 ) : (
-                  <span className="valueIncorrecto">
-                    {datosCorrectos.sprite.error ? (
-                      <h3>{datosCorrectos.sprite.error}</h3>
-                    ) : (
-                      <></>
-                    )}
-                  </span>
-                )
-              ) : (
-                <></>
-              )}
-            </div>
+                  <></>
+                )}
+              </div>
+            </>
           </>
+
+          {/*Select Tipos*/}
           <select name="tipos" onChange={HandleTipos} defaultValue="NingunTipo">
             <option>Elije El Tipo</option>
             {tiposDataBase.map((el) => {
@@ -435,6 +439,7 @@ export const CreatePokemon = () => {
             })}
           </select>
 
+          {/*Select Tipos*/}
           <div className="TiposFormulario">
             {tipos.map((el) => {
               return (
