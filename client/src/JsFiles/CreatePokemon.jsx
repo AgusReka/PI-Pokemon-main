@@ -7,19 +7,20 @@ const axios = require("axios").default;
 
 export const CreatePokemon = () => {
   const dispatch = useDispatch();
-  const [propiedades, usePropiedades] = useState([]);
+  const [propiedades, usePropiedades] = useState({});
   const [tipos, useTipos] = useState([]);
   const [tiposDataBase, useTiposDataBase] = useState([]);
   const [envioExitoso, useEnvioExitoso] = useState();
   const [datosCorrectos, usedatosCorrectos] = useState({
-    name: { bool: false, error: "" },
-    vida: { bool: false, error: "" },
-    fuerza: { bool: false, error: "" },
-    defensa: { bool: false, error: "" },
-    velocidad: { bool: false, error: "" },
-    altura: { bool: false, error: "" },
-    peso: { bool: false, error: "" },
+    name: { bool: false, error: "Campo Requerido" },
+    vida: { bool: false, error: "Campo Requerido" },
+    fuerza: { bool: false, error: "Campo Requerido" },
+    defensa: { bool: false, error: "Campo Requerido" },
+    velocidad: { bool: false, error: "Campo Requerido" },
+    altura: { bool: false, error: "Campo Requerido" },
+    peso: { bool: false, error: "Campo Requerido" },
     sprite: { bool: false, error: "" },
+    tipos: { bool: false, error: "Hace Falta 1 Tipo" },
   });
   const [tiposCorrectos, usetiposCorrectos] = useState();
   const HandleEnvioExitoso = (params, text) => {
@@ -28,7 +29,6 @@ export const CreatePokemon = () => {
   const traerDatosFromApi = async () => {
     const datos = await (await axios.get("http://localhost:3001/types")).data;
     console.log("Se trajeron los Datos");
-    //console.log(datos[0])
     return datos;
   };
   const HandleTiposDataBase = (params) => {
@@ -43,98 +43,88 @@ export const CreatePokemon = () => {
     return "i: " + name;
   };
   const HandleDatosIncorrectos = async () => {
-    /*let datosAEnviar = {};
-      datos.map((el) => {
-        if (el.tipos) {
-          datosAEnviar = {
-            ...datosAEnviar,
-            tipos: el.tipos.map((elTipos) => {
-              return elTipos;
-            }),
-          };
-        } else {
-            datosAEnviar = { ...datosAEnviar, [el.name]: el.value };
-        }
-      });*/
     let a = Object.keys(datosCorrectos);
     let datos = {};
     a.map((key) => {
-      console.log(key);
-      if (datosCorrectos[key].bool === false){
-        datos = {...datos, [key]: {bool:datosCorrectos[key].bool,error:"No Se Puede Dejar Este Campo Incompleto"}};
-      }else if(datosCorrectos[key].bool === true){
-        
-        datos = {...datos, [key]: {bool:datosCorrectos[key].bool,error:""}};
+      if (datosCorrectos[key].bool === false) {
+        datos = {
+          ...datos,
+          [key]: {
+            bool: datosCorrectos[key].bool,
+            error:
+              key === "tipos" ? "Hace Falta 1 Tipo": key !== "sprite" ? "No Se Puede Dejar Este Campo Incompleto"
+                : "",
+          },
+        };
+      } else if (datosCorrectos[key].bool === true) {
+        datos = {
+          ...datos,
+          [key]: { bool: datosCorrectos[key].bool, error: "" },
+        };
       }
     });
-    console.log(datos);
     usedatosCorrectos(datos);
   };
 
   const HandleState = async (e) => {
     const value = e.target.value;
     const nombre = e.target.name;
-    if (!isNaN(value)) {
-      HandleDatosCorrectos(true, "", e.target.name);
-      await HandlePropiedades(e.target.name, Number(e.target.value));
-    } else {
-      if (nombre === "name") {
-        if (value.length === 0) {
-          console.log("aaaaaa");
-        }
-        if (value.length < 3) {
-          console.log("El Nombre Debe Contener Minimo 3 Letras");
-          HandleDatosCorrectos(
-            false,
-            "El Nombre Debe Contener Minimo 3 Letras",
-            e.target.name
-          );
-          HandlePropiedadesBorrar(nombre);
-        } else if (value.length > 10) {
-          console.log("El Nombre Debe Contener Maximo 10 Letras");
-          HandleDatosCorrectos(
-            false,
-            "El Nombre Debe Contener Maximo 10 Letras",
-            e.target.name
-          );
-          HandlePropiedadesBorrar(nombre);
-        } else {
-          HandleDatosCorrectos(true, "", e.target.name);
-          let repetido = false;
-          propiedades.map((el) => {
-            if (el.name == nombre) {
-              repetido = true;
-            } else repetido = false;
-          });
-          if (repetido === false)
-            await HandlePropiedades(e.target.name, e.target.value);
-        }
-      } else if (nombre === "sprite") {
-        let a = value.substring(0, 8);
-        if (a === "https://") {
-          HandleDatosCorrectos(true, "", e.target.name);
-          await HandlePropiedades(e.target.name, e.target.value);
-        } else {
-          HandleDatosCorrectos(false, "URL Invalida", e.target.name);
-        }
+    if (nombre === "name") {
+      if (value.length < 3) {
+        console.log("El Nombre Debe Contener Minimo 3 Letras");
+        HandleDatosCorrectos(
+          false,
+          "El Nombre Debe Contener Minimo 3 Letras",
+          e.target.name
+        );
+        HandlePropiedadesBorrar(nombre);
+      } else if (value.length > 10) {
+        console.log("El Nombre Debe Contener Maximo 10 Letras");
+        HandleDatosCorrectos(
+          false,
+          "El Nombre Debe Contener Maximo 10 Letras",
+          e.target.name
+        );
+        HandlePropiedadesBorrar(nombre);
+      } else {
+        HandleDatosCorrectos(true, "", e.target.name);
+        await HandlePropiedades(e.target.name, e.target.value);
       }
+    } else if (nombre === "sprite") {
+      let a = value.substring(0, 8);
+      if (a === "https://" || a === "") {
+        HandleDatosCorrectos(true, "", e.target.name);
+        await HandlePropiedades(e.target.name, e.target.value);
+      } else {
+        HandleDatosCorrectos(false, "URL Invalida", e.target.name);
+      }
+    }else{
+      if (!isNaN(value)) {
+        if (value > 0) {
+          HandleDatosCorrectos(true, "", e.target.name);
+          await HandlePropiedades(e.target.name, Number(e.target.value));
+        } else {
+          HandleDatosCorrectos(
+            false,
+            "El Numero Debe Ser Mayor A 0",
+            e.target.name
+          );
+        }
+      } 
     }
-    console.log(value);
   };
   const HandlePropiedades = async (name, value) => {
-    await usePropiedades([...propiedades, { name: name, value: value }]);
+    let a = { ...propiedades, [name]: { name: name, value: value } };
+    await usePropiedades(a);
   };
   const HandlePropiedadesBorrar = async (nombre) => {
-    usePropiedades(
-      propiedades.filter((e) => {
-        return e.name !== nombre;
-      })
-    );
+    usePropiedades({ ...propiedades, [nombre]: { bool: false, value: "" } });
   };
   const HandleTipos = (e) => {
     if (tipos.length > 1) return;
     let copied = tipos.find((el) => el === e.target.value);
     if (copied) return;
+    HandleDatosCorrectos(true, "", e.target.name);
     CambiarTipos(e.target.value);
   };
   const CambiarTipos = (params) => {
@@ -142,16 +132,61 @@ export const CreatePokemon = () => {
   };
   const BorrarTipo = (e) => {
     const name = e.target.name;
-    useTipos(
-      tipos.filter((el) => {
-        if (el !== name) return el !== name;
-      })
-    );
+    let a = tipos.filter((el) => {
+      if (el !== name) return el !== name;
+    });
+    if (a.length < 1) {
+      HandleDatosCorrectos(false, "Hace Falta 1 Tipo", "tipos");
+    }
+    useTipos(a);
   };
   const enviarPokemon = async (e) => {
     e.preventDefault();
-    const datos = [...propiedades, { tipos: tipos }];
+    const datos = { ...propiedades, tipos: tipos };
     console.log(datos);
+    let poke = {};
+    let keysPropiedades = Object.keys(datos);
+    let keysDatosCorrectos = Object.keys(datosCorrectos);
+    if (keysPropiedades.length < 9) {
+      await HandleDatosIncorrectos();
+      HandleEnvioExitoso(false, "!Faltan Llenar Datos¡");
+    } else {
+      let puedeMandar = true;
+      keysDatosCorrectos.map((key) => {
+        if (datosCorrectos[key].bool) {
+          if (puedeMandar !== false) {
+            puedeMandar = true;
+          }
+        } else {
+          puedeMandar = false;
+        }
+      });
+      if (puedeMandar) {
+        keysPropiedades.map((key) => {
+          if (key === "tipos") {
+            poke = { ...poke, [key]: datos[key] };
+          } else {
+            poke = { ...poke, [key]: datos[key].value };
+          }
+        });
+        console.log(poke);
+        const pokemon = await axios.post("http://localhost:3001/pokemons", {
+          ...poke,
+        });
+        let pokeApi = await (
+          await axios.get("http://localhost:3001/pokemonsDataBase")
+        ).data;
+        await dispatch({
+          type: "AgregarPokeDatabase",
+          payload: await pokeApi,
+        });
+        HandleEnvioExitoso(true);
+      } else {
+        await HandleDatosIncorrectos();
+        HandleEnvioExitoso(false, "!Faltan Llenar Datos¡");
+      }
+    }
+    /*
     if (datos.length > 8) {
       if (datos[datos.length - 1].tipos.length < 1)
         HandleEnvioExitoso(false, "!Faltan Llenar Datos¡");
@@ -170,22 +205,12 @@ export const CreatePokemon = () => {
           }
         });
         console.log(datosAEnviar.tipos);
-        const pokemon = await axios.post("http://localhost:3001/pokemons", {
-          ...datosAEnviar,
-        });
-        let pokeApi = await (
-          await axios.get("http://localhost:3001/pokemonsDataBase")
-        ).data;
-        await dispatch({
-          type: "AgregarPokeDatabase",
-          payload: await pokeApi,
-        });
-        HandleEnvioExitoso(true);
+        
       }
     } else {
       await HandleDatosIncorrectos();
       HandleEnvioExitoso(false, "!Faltan Llenar Datos¡");
-    }
+    }*/
   };
   const RandomKey = () => {
     return Math.floor(Math.random() * 999999) + 1;
@@ -208,7 +233,13 @@ export const CreatePokemon = () => {
               />
               {datosCorrectos != undefined ? (
                 datosCorrectos.name.bool ? (
-                  <span className="valueCorrecto">&#9745;</span>
+                  propiedades["name"].value != 0 ? (
+                    <span className="valueCorrecto">&#9745;</span>
+                  ) : (
+                    <span className="valueIncorrecto">
+                      <h3>Campo Requerido</h3>
+                    </span>
+                  )
                 ) : (
                   <span className="valueIncorrecto">
                     {datosCorrectos.name.error ? (
@@ -371,7 +402,7 @@ export const CreatePokemon = () => {
             <div className="NameInput">
               <input
                 max={150}
-                placeholder="Sprite (URL):"
+                placeholder="Sprite (URL): Este Campo Puede Estar Vacio"
                 name="sprite"
                 type="url"
                 onChange={HandleState}
@@ -415,6 +446,17 @@ export const CreatePokemon = () => {
                 </span>
               );
             })}
+            {datosCorrectos != undefined ? (
+              tipos.length > 0 ? (
+                <span className="valueCorrecto">&#9745;</span>
+              ) : (
+                <span className="valueIncorrecto">
+                  <h3>{datosCorrectos["tipos"].error}</h3>
+                </span>
+              )
+            ) : (
+              <></>
+            )}
           </div>
           {envioExitoso != undefined ? (
             envioExitoso.params ? (
