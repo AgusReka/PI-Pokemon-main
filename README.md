@@ -41,4 +41,4 @@ La idea general es crear una aplicación en la cual se puedan ver los distintos 
 
 * **LinkedIn**: https://www.linkedin.com/in/agustin-recabarren-b163a1237/
 
-[PI - POKEMON APP](pokeapi-recabarren.vercel.app) - PokemonApp
+[PI - POKEMON APP](pokeapi-recabarren.vercel.app) - Link De La App
