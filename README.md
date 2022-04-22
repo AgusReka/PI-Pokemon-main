@@ -35,3 +35,8 @@ La idea general es crear una aplicación en la cual se puedan ver los distintos 
 - [ ] CSS
 - [ ] Sequelize - Postgres
 - [ ] Node.js
+#### Contactame : 
+
+* **Mail**: agustinr2806@gmail.com 
+
+* **LinkedIn**: https://www.linkedin.com/in/agustin-recabarren-b163a1237/
