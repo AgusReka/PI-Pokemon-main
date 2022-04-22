@@ -40,4 +40,5 @@ La idea general es crear una aplicación en la cual se puedan ver los distintos 
 * **Mail**: agustinr2806@gmail.com 
 
 * **LinkedIn**: https://www.linkedin.com/in/agustin-recabarren-b163a1237/
-[PI - POKEMON APP](pokeapi-recabarren.vercel.app)
+
+[PI - POKEMON APP](pokeapi-recabarren.vercel.app) - PokemonApp
